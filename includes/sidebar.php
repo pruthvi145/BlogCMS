@@ -24,17 +24,16 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<ul class="list-unstyled">
-					<?php
-				
-				$query = "SELECT * FROM category";
-				$select_all_cat = mysqli_query($connection, $query);
-				
-				while($row = mysqli_fetch_assoc($select_all_cat)){
-					$cat_id =  $row['cat_id'];
-					$cat_title =  $row['cat_title'];
-					echo "<li><a href='?cat_id = {$cat_id}'>{$cat_title}</a></li>";
-				}
-			?>
+				<?php $rows = fetch_all_categories(); ?>
+				<?php foreach($rows as $row): ?>
+				<?php 
+					
+					$cat_id = $row['cat_id'];
+					$cat_title = $row['cat_title'];
+			
+				?>
+					<li><a href="?cat_id=<?php echo $cat_id ?>"><?php echo $cat_title ?></a></li>
+				<?php  endforeach; ?>
 				</ul>
 			</div>
 			<!-- /.col-lg-6 -->

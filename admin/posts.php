@@ -8,6 +8,10 @@
 		if(isset($_GET['delete'])){
 			$post_id = $_GET['delete'];
 			delete_post($post_id);
+			
+		}elseif(isset($_GET['clone'])){
+			$post_id = $_GET['clone'];
+			clone_post($post_id);
 		}
 	
 	?>
@@ -65,6 +69,8 @@
 							<td scope="col"><?php echo $post_comment_conut ?></td>
 							<td scope="col"><?php echo $post_date ?></td>
 							<td scope="col"><a href="?delete=<?php echo $post_id ?>">Delete</a></td>
+							<td scope="col"><a href="post.php?p_id=<?php echo $post_id ?>">Edit</a></td>
+							<td scope="col"><a href="?clone=<?php echo $post_id ?>">Clone</a></td>
 						</tr>
 					<?php endforeach; ?>
 					</tbody>

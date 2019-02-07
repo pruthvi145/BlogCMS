@@ -4,12 +4,17 @@
 	if(isset($_POST['add_post'])){
 		$post_fields = $_POST;
 		$post_files = $_FILES;
+				
+		$post_image = $post_files['post_image']['name'];
+		$post_image_temp = $post_files['post_image']['tmp_name'];
+		move_uploaded_file($post_image_temp, "../imgs/$post_image");
 		
-		
+		$post_fields['post_image'] = $post_image;
+		add_post($post_fields);
 	}
 
 ?>
-
+<link rel="stylesheet" href="../imgs/$post_image">
 <div id="wrapper">
 	<!-- Navigation -->
 	<?php include "includes/navigation.php" ?>
@@ -28,8 +33,20 @@
 						<input type="text" class="form-control" name="post_title">
 					</div>
 					<div class="form-group">
-						<label for="post_cat_id">Post cat id</label>
-						<input type="text" class="form-control" name="post_cat_id">
+						<label for="post_cat_id">Select Category</label>
+						<select name="post_cat_id" id="">
+						<?php $cat_rows = fetch_all_categories(); ?>
+						<?php foreach($cat_rows as $cat_row): ?>
+						<?php 
+							
+							$cat_id = $cat_row['cat_id'];		
+							$cat_title = $cat_row['cat_title'];		
+						
+						?>
+							<option value="<?php echo $cat_id ?>"><?php echo $cat_title ?></option>
+							
+						<?php endforeach; ?>
+						</select>
 					</div>
 					<div class="form-group">
 						<label for="post_author">Post Author</label>
@@ -53,7 +70,6 @@
 					</div>
 					<button type="submit" class="btn btn-primary" name="add_post">Add Post</button>
 				</form>
-
 			</div>
 		</div>
 	</div>
