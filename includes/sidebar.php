@@ -32,7 +32,7 @@
 					$cat_title = $row['cat_title'];
 			
 				?>
-					<li><a href="?cat_id=<?php echo $cat_id ?>"><?php echo $cat_title ?></a></li>
+					<li><a href="category.php?cat_id=<?php echo $cat_id ?>"><?php echo $cat_title ?></a></li>
 				<?php  endforeach; ?>
 				</ul>
 			</div>

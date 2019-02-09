@@ -1,3 +1,4 @@
+<?php include "includes/db.php" ?>
 <?php include "includes/header.php" ?>
 
 <?php 
@@ -25,8 +26,6 @@
 <div id="wrapper">
 	<!-- Navigation -->
 	<?php include "includes/navigation.php" ?>
-
-
 	<div id="page-wrapper">
 		<div class="container-fluid">
 			<div class="row">

@@ -1,3 +1,4 @@
+<?php include "includes/db.php" ?>
 <?php include "includes/header.php" ?>
 <?php 
 	
@@ -14,7 +15,6 @@
 	}
 
 ?>
-<link rel="stylesheet" href="../imgs/$post_image">
 <div id="wrapper">
 	<!-- Navigation -->
 	<?php include "includes/navigation.php" ?>
