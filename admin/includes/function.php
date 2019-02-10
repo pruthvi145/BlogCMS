@@ -1,3 +1,4 @@
+<?php include "db.php" ?>
 <?php
 
 	function getRootURI(){
@@ -6,7 +7,7 @@
 
 #Categories - CRUD - start
 
-		function fetch_all_categories(){
+	function fetch_all_categories(){
 		global $connection;
 		$query = "SELECT * FROM categories";
 		$res = mysqli_query($connection, $query);
@@ -18,6 +19,14 @@
 			$rows[] = $row;
 		} 
 		return $rows;
+	}
+	
+	function total_categories(){
+		global $connection;
+		$query = "SELECT * FROM categories";
+		$res = mysqli_query($connection, $query);
+		
+		return mysqli_num_rows($res);
 	}
 
 	function fetch_category($cat_id){
@@ -100,6 +109,14 @@
 			$rows[] = $row;
 		} 
 		return $rows;
+	}
+
+	function total_posts(){
+		global $connection;
+		$query = "SELECT * FROM posts";
+		$res = mysqli_query($connection, $query);
+		
+		return mysqli_num_rows($res);
 	}
 
 	function fetch_post($post_id){
@@ -200,6 +217,7 @@
 		
 		$row = fetch_post($post_id);
 		add_post($row);
+		header('Location: posts.php');
 	}
 
 	function fetch_category_posts($cat_id){
@@ -217,6 +235,24 @@
 		} 
 		return $rows;
 	}
+
+function search_post($search){
+	
+	global $connection;
+	$query = "SELECT * FROM posts WHERE post_tags LIKE '%$search%' ";	
+	$query .= "OR post_title LIKE '%$search%' ";	
+	$res = mysqli_query($connection, $query);
+	
+	if(!$res){
+		die("Query failed".mysqli_error($connection));
+	}
+	
+	$rows = array();
+	while($row = mysqli_fetch_assoc($res)){
+		$rows[] = $row;
+	} 
+	return $rows;			
+}
 
 
 #posts - CRUD - end
@@ -237,6 +273,14 @@
 			$rows[] = $row;
 		} 
 		return $rows;
+	}
+
+	function total_comments(){
+		global $connection;
+		$query = "SELECT * FROM comments";
+		$res = mysqli_query($connection, $query);
+		
+		return mysqli_num_rows($res);
 	}
 
 	function fetch_comment($comment_id){
@@ -299,7 +343,7 @@
 	function approve_comment($comment_id, $status){
 			global $connection;
 				
-			$comment_status = ($status =='approve') ? 'approved' : 'unapporved';			
+			$comment_status = ($status =='approve') ? 'approved' : 'unapproved';			
 		
 			$query = "UPDATE comments SET ";
 			$query .= "comment_status = '$comment_status' ";
@@ -359,4 +403,151 @@ function delete_post_comments($post_id){
 		}
 	}
 
-#Categories - CRUD - end
+#Comments - CRUD - e
+
+
+#users - CRUD - start
+
+	function fetch_all_users(){
+		global $connection;
+		$query = "SELECT * FROM users";
+		$res = mysqli_query($connection, $query);
+
+		if(!$res){
+				die("ERROR: can't fetch all users! <br>".$query."<br>".mysqli_error($connection));
+		}
+		$rows = array();
+		while($row = mysqli_fetch_assoc($res)){
+			$rows[] = $row;
+		} 
+		return $rows;
+	}
+
+	function total_users(){
+		global $connection;
+		$query = "SELECT * FROM users";
+		$res = mysqli_query($connection, $query);
+		
+		return mysqli_num_rows($res);
+	}
+
+	function fetch_user($user_id){
+		global $connection;
+		
+		$query = "SELECT * FROM users ";
+		$query .= "WHERE user_id = $user_id";
+		$res = mysqli_query($connection,$query);
+		
+		if(!$res){
+			die("ERROR: can't fetch user! <br>".$query."<br>".mysqli_error($connection));
+		}
+		
+		return mysqli_fetch_assoc($res);
+	}
+
+	function add_user($user_fields){
+		global $connection;
+		
+		$username = $user_fields['username'];
+		$user_password= $user_fields['user_password'];
+		$user_firstname = $user_fields['user_firstname'];
+		$user_lastname = $user_fields['user_lastname'];
+		$user_email = $user_fields['user_email'];
+		$user_image = $user_fields['user_image'];
+		$user_role= $user_fields['user_role'];
+		//$radSalt = $user_fields['randSalt'];
+		$randSalt = "passenc";
+
+		$query = "INSERT INTO users(username, user_password, user_firstname, user_lastname, user_email, user_image, user_role, randSalt) ";
+		$query .= "VALUES('$username', '$user_password', '$user_firstname', '$user_lastname', '$user_email', '$user_image', '$user_role', '$randSalt')";
+		$res = mysqli_query($connection,$query);
+		
+		if(!$res){
+			die("ERROR: can't add user! <br>".$query."<br>".mysqli_error($connection));
+		}
+	}
+
+	function delete_user($user_id){
+		global $connection;
+		$query = "DELETE FROM users ";
+		$query .= "WHERE user_id = $user_id";
+		$res = mysqli_query($connection,$query);
+		
+		if(!$res){
+			die("ERROR: can't delete user! <br>".$query."<br>".mysqli_error($connection));
+		}else{
+				header('Location: users.php');
+			}
+	}
+
+	function edit_user($user_id, $user_fields){
+			global $connection;
+		
+			$username = $user_fields['username'];
+			$user_password= $user_fields['user_password'];
+			$user_firstname = $user_fields['user_firstname'];
+			$user_lastname = $user_fields['user_lastname'];
+			$user_email = $user_fields['user_email'];
+			$user_image = $user_fields['user_image'];
+			$user_role= $user_fields['user_role'];
+			//$radSalt = $user_fields['randSalt'];
+			$randSalt = "passenc";
+		
+			$query = "UPDATE users SET ";
+			$query .= "username = '$username', ";
+			$query .= "user_password = '$user_password', ";
+			$query .= "user_firstname = '$user_firstname', ";
+			$query .= "user_lastname = '$user_lastname', ";
+			$query .= "user_email = '$user_email', ";
+			$query .= "user_image = '$user_image', ";
+			$query .= "user_role = '$user_role', ";
+			$query .= "randSalt = '$randSalt' ";
+
+			$query .= "WHERE user_id = $user_id";
+			$res = mysqli_query($connection,$query);
+
+			if(!$res){
+				die("ERROR: can't update user! <br>".$query."<br>".mysqli_error($connection));
+			}
+	}
+	function clone_user($user_id){
+		global $connection;
+
+		$row = fetch_user($user_id);
+		add_user($row);
+		header('Location: users.php');
+	}
+
+function fetch_admin_users(){
+	global $connection;
+		$query = "SELECT * FROM users ";
+		$query .= "WHERE user_role = 'admin'";
+		$res = mysqli_query($connection, $query);
+
+		if(!$res){
+				die("ERROR: can't fetch admins! <br>".$query."<br>".mysqli_error($connection));
+		}
+		$rows = array();
+		while($row = mysqli_fetch_assoc($res)){
+			$rows[] = $row;
+		} 
+		return $rows;
+}
+
+
+#users - CRUD - end
+
+function count_rows($tablename, $condition = '', $value = ''){
+	global $connection;
+	$query = "SELECT * FROM $tablename";
+	
+	if(!empty($condition) && !empty($value)){
+		$query .= " WHERE $condition = '$value'";
+	}
+	$res = mysqli_query($connection, $query);
+	if(!$res){
+		die("ERROR: Can't count rows from $tablename.<br>".$query."<br>".mysqli_error($connection));
+	}
+	return mysqli_num_rows($res);
+	
+}

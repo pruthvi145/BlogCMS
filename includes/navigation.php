@@ -24,17 +24,9 @@
 				?>
 					<li><a href="category.php?cat_id=<?php echo $cat_id ?>"><?php echo $cat_title ?></a></li>
 				<?php  endforeach; ?>
+			<?php if(isset($_SESSION['user_id'])): ?>
 			<li><a href='admin'>Admin</a></li>
-				
-				<!--<li>
-					<a href="#">About</a>
-				</li>
-				<li>
-					<a href="#">Services</a>
-				</li>
-				<li>
-					<a href="#">Contact</a>
-				</li> -->
+			<?php endif; ?>
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->

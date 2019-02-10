@@ -1,4 +1,3 @@
-<?php include "includes/db.php" ?>
 <?php include "includes/header.php" ?>
 
 <?php if(isset($_GET['p_id'])): ?>
@@ -88,7 +87,7 @@
 					</div>
 					<div class="form-group">
 						<div style="margin:20px 0"><b>Post Image</b></div>
-						<img src="../imgs/<?php echo $post_image ?>" alt="Thumbnail" height="100px;">
+						<img src="../imgs/<?php echo $post_image ?>" alt="Thumbnail" height="100px">
 						<input type="file" class="form-control" name="post_image">
 					</div>
 					<div class="form-group">
@@ -113,7 +112,7 @@
 	</div>
 </div>
 <!-- /#wrapper -->
-<?php include "includes/footer.php" ?>
 <?php else: ?>
 <?php header('Location: posts.php'); ?>
 <?php endif; ?>
+<?php include "includes/footer.php" ?>

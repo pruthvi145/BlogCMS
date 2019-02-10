@@ -1,4 +1,4 @@
-<?php include "includes/db.php" ?>
+
 <?php include "includes/header.php" ?>
 
 	<?php 
@@ -74,8 +74,8 @@
 							<td scope="col">
 								<?php echo $comment_date ?>
 							</td>
-							<td scope="col"><a href="?status=approve&c_id=<?php echo $comment_id ?>">Apporve</a></td>
-							<td scope="col"><a href="?status=unapprove&c_id=<?php echo $comment_id ?>">Unpporve</a></td>
+							<td scope="col"><a href="?status=approve&c_id=<?php echo $comment_id ?>">approve</a></td>
+							<td scope="col"><a href="?status=unapprove&c_id=<?php echo $comment_id ?>">unapprove</a></td>
 							<td scope="col"><a href="?delete=<?php echo $comment_id ?>">Delete</a></td>
 						</tr>
 						<?php endforeach; ?>

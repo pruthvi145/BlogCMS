@@ -1,6 +1,4 @@
-<?php include "includes/db.php" ?>
 <?php include "includes/header.php" ?>
-<?php include "admin/includes/function.php" ?>
 <?php include "includes/navigation.php" ?>
 
 <?php if(isset($_GET['p_id'])): ?>
@@ -118,5 +116,5 @@
 <hr>
 <?php include "includes/footer.php" ?>
 <?php else: ?>
-<?php #header('Location: index.php'); ?>
+<?php header('Location: index.php'); ?>
 <?php endif; ?>

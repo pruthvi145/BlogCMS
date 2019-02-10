@@ -95,10 +95,10 @@
 			</ul>
 		</li>
 		<li class="dropdown">
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?php echo $user['user_firstname']." ".$user['user_lastname']; ?><b class="caret"></b></a>
 			<ul class="dropdown-menu">
 				<li>
-					<a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+					<a href="user.php?u_id=<?php echo $user['user_id'] ?>"><i class="fa fa-fw fa-user"></i> Profile</a>
 				</li>
 				<li>
 					<a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
@@ -108,7 +108,7 @@
 				</li>
 				<li class="divider"></li>
 				<li>
-					<a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+					<a href="<?php echo getRootURI(); ?>/admin/includes/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
 				</li>
 			</ul>
 		</li>
@@ -117,26 +117,11 @@
 	<div class="collapse navbar-collapse navbar-ex1-collapse">
 		<ul class="nav navbar-nav side-nav">
 			<li>
-				<a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+				<a href="index.php"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
 			</li>
 			<li>
-				<a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
-			</li>
-			<li>
-				<a href="tables.html"><i class="fa fa-fw fa-table"></i> Tables</a>
-			</li>
-			<li>
-				<a href="forms.html"><i class="fa fa-fw fa-edit"></i> Forms</a>
-			</li>
-			<li>
-				<a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-			</li>
-			<li>
-				<a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-			</li>
-			<li>
-				<a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
-				<ul id="demo" class="collapse">
+				<a href="javascript:;" data-toggle="collapse" data-target="#posts"><i class="fa fa-fw fa-arrows-v"></i> Posts <i class="fa fa-fw fa-caret-down"></i></a>
+				<ul id="posts" class="collapse">
 					<li>
 						<a href="posts.php">View All Posts</a>
 					</li>
@@ -145,17 +130,22 @@
 					</li>
 				</ul>
 			</li>
+				<li>
+				<a href="javascript:;" data-toggle="collapse" data-target="#users"><i class="fa fa-fw fa-arrows-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
+				<ul id="users" class="collapse">
+					<li>
+						<a href="users.php">View All users</a>
+					</li>
+					<li>
+						<a href="add_user.php">Add New iuser</a>
+					</li>
+				</ul>
+			</li>
 			<li class="active">
 				<a href="categories.php"><i class="fa fa-fw fa-file"></i>Catagories</a>
 			</li>
 			<li>
 				<a href="comments.php"><i class="fa fa-fw fa-file"></i>Comments</a>
-			</li>
-			<li>
-				<a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
-			</li>
-			<li>
-				<a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
 			</li>
 		</ul>
 	</div>
