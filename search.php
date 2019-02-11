@@ -12,10 +12,13 @@
 				Search result<small> - <?php echo $search ?></small>
 			</h1>
 					
-		<?php if(!empty($rows)): ?>
-					<?php foreach($rows as $row): ?>
+			<?php if(empty($rows)): ?>
+				<h3 class="alert alert-info" role="alert">No Post found!</h3>
+			<?php endif; ?>
+			<?php foreach($rows as $row): ?>
 			<?php 
 				
+				$post_id = $row['post_id'];
 				$post_title = $row['post_title'];
 				$post_author = $row['post_author'];
 				$post_date = $row['post_date'];
@@ -29,19 +32,11 @@
 			<p><span class="glyphicon glyphicon-time"></span> Posted on<?php echo $post_date ?></p>
 			<hr>
 			
-			<img class="img-responsive" src="imgs/<?php echo $post_image ?>" alt="">
+			<a href="post.php?p_id=<?php echo $post_id ?>"><img class="img-responsive" src="imgs/<?php echo $post_image ?>" alt=""></a>
 			<hr>
-			<p><?php echo $post_content ?></p>
-			<a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-
+			<p><?php echo substr($post_content, 0, 100) ?>...</p>
 			<hr>
-
 			<?php endforeach; ?>
-		<?php else: ?>
-			<h2>No Post found!</h2>
-		<?php endif; ?>
-
-
 		</div>
 		<?php include "includes/sidebar.php" ?>
 	</div>

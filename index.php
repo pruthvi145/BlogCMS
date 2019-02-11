@@ -1,15 +1,16 @@
 <?php include "includes/header.php" ?>
 <?php include "includes/navigation.php" ?>
-
 <!-- Page Content -->
 <div class="container">
 	<div class="row">
 		<!-- Blog Entries Column -->
 		<div class="col-md-8">
-			<h1 class="page-header">
-				Page title <small>Secondary Text</small>
-			</h1>
-			<?php $rows = fetch_all_posts(); ?>
+	
+			<h1 class="page-header">See all Posts <small>No subtitle!</small></h1>
+			<?php $rows = fetch_published_posts(); ?>
+			<?php if(empty($rows)): ?>
+				<div class="alert alert-info" role="alert">No Post found!</div>
+			<?php endif; ?>
 			<?php foreach($rows as $row): ?>
 			<?php 
 						
@@ -24,26 +25,15 @@
 				$post_content = $row['post_content'];
 					
 				?>
-			<!-- First Blog Post -->
-			<h2>
-				<a href="post.php?p_id=<?php echo $post_id ?>">
-					<?php echo $post_title ?></a>
-			</h2>
-			<p class="lead">
-				by <a href="index.php">
-					<?php echo $post_author ?></a>
-			</p>
-			<p><span class="glyphicon glyphicon-time"></span> Posted on
-				<?php echo $post_date ?>
-			</p>
+			<!-- Blog Post -->
+			<h2><a href="post.php?p_id=<?php echo $post_id ?>"><?php echo $post_title ?></a></h2>
+			
+			<p class="lead">by <a href="index.php"><?php echo $post_author ?></a></p>
+			<p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
 			<hr>
-			<img height="300" src="imgs/<?php echo $post_image ?>" alt="">
+			<a href="post.php?p_id=<?php echo $post_id ?>"><img class="img-responsive" src="imgs/<?php echo $post_image ?>" alt="postimage"></a>
 			<hr>
-			<p>
-				<?php echo substr($post_content, 0, 100) ?>...</p>
-
-			<a class="btn btn-primary" href="post.php?p_id=<?php echo $post_id ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-
+			<p><?php echo substr($post_content, 0, 100) ?>...</p>
 			<hr>
 			<?php endforeach; ?>
 		</div>

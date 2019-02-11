@@ -5,6 +5,16 @@
 		return "http://localhost/php-newcms";
 	}
 
+	function is_loggedin(){
+		return (isset($_SESSION['user_id'])) ? true : false;
+	}
+
+	function is_admin($user_id = ''){
+		$user_id = (empty($user_id)) ? $_SESSION['user_id'] : $user_id;
+		$user = fetch_user($user_id);
+		return ($user['user_role'] === "admin") ? true : false;
+		} 
+
 #Categories - CRUD - start
 
 	function fetch_all_categories(){
@@ -21,14 +31,6 @@
 		return $rows;
 	}
 	
-	function total_categories(){
-		global $connection;
-		$query = "SELECT * FROM categories";
-		$res = mysqli_query($connection, $query);
-		
-		return mysqli_num_rows($res);
-	}
-
 	function fetch_category($cat_id){
 		global $connection;
 		$query = "SELECT * FROM categories ";
@@ -38,7 +40,6 @@
 		if(!$res){
 			die("ERROR: can't fetch category! <br>".$query."<br>".mysqli_error($connection));
 		}
-		
 		return mysqli_fetch_assoc($res);
 	}
 
@@ -110,13 +111,20 @@
 		} 
 		return $rows;
 	}
-
-	function total_posts(){
+	function fetch_published_posts(){
 		global $connection;
-		$query = "SELECT * FROM posts";
+		$query = "SELECT * FROM posts ";
+		$query .= "WHERE post_status = 'published'";
 		$res = mysqli_query($connection, $query);
-		
-		return mysqli_num_rows($res);
+
+		if(!$res){
+				die("ERROR: can't fetch all Posts! <br>".$query."<br>".mysqli_error($connection));
+		}
+		$rows = array();
+		while($row = mysqli_fetch_assoc($res)){
+			$rows[] = $row;
+		} 
+		return $rows;
 	}
 
 	function fetch_post($post_id){
@@ -153,6 +161,7 @@
 		if(!$res){
 			die("ERROR: can't add post! <br>".$query."<br>".mysqli_error($connection));
 		}
+		else return true;
 	}
 
 	function delete_post($post_id){
@@ -163,10 +172,7 @@
 		
 		if(!$res){
 			die("ERROR: can't delete post! <br>".$query."<br>".mysqli_error($connection));
-		}else{
-				delete_post_comments($post_id);
-				header('Location: posts.php');
-			}
+		}
 	}
 
 	function edit_post($post_id, $post_fields){
@@ -196,15 +202,16 @@
 
 			if(!$res){
 				die("ERROR: can't update category! <br>".$query."<br>".mysqli_error($connection));
-			}
+			}else return true;
 	}
 
-	function edit_post_field($post_id, $post_field, $post_field_value){
+	function edit_post_field($post_id, $field, $value){
 		global $connection;
 		
 		$query = "UPDATE posts SET ";
-		$query .= "$post_field = $post_field_value ";
-		$query .= "WHERE post_id = $post_id";
+		$query .= "$field =  ";
+		$query .= (is_string($value)) ? "'$value'" : "$value";
+		$query .= " WHERE post_id = $post_id";
 			$res = mysqli_query($connection,$query);
 
 			if(!$res){
@@ -217,7 +224,6 @@
 		
 		$row = fetch_post($post_id);
 		add_post($row);
-		header('Location: posts.php');
 	}
 
 	function fetch_category_posts($cat_id){
@@ -275,14 +281,6 @@ function search_post($search){
 		return $rows;
 	}
 
-	function total_comments(){
-		global $connection;
-		$query = "SELECT * FROM comments";
-		$res = mysqli_query($connection, $query);
-		
-		return mysqli_num_rows($res);
-	}
-
 	function fetch_comment($comment_id){
 		global $connection;
 		
@@ -304,9 +302,8 @@ function search_post($search){
 		$comment_content = $comment_fields['comment_content'];			
 		$comment_status = $comment_fields['comment_status'];			
 		$comment_date =  date('d-m-y');
-
-		$post_comments_rows = fetch_post_all_comments($comment_post_id);
-		$n = sizeof($post_comments_rows);
+		
+		$n = count_rows('comments', 'comment_post_id', $comment_post_id);
 		
 		$query = "INSERT INTO comments(comment_post_id,comment_author, comment_email, comment_content, comment_status, comment_date) ";
 		$query .= "VALUES($comment_post_id,'$comment_author', '$comment_email', '$comment_content', '$comment_status', $comment_date)";
@@ -316,6 +313,7 @@ function search_post($search){
 			die("ERROR: can't add comment! <br>".$query."<br>".mysqli_error($connection));
 		}else{
 			edit_post_field($comment_post_id, 'post_comment_count', $n+1);	
+			return true;
 		}
 	}
 
@@ -324,8 +322,7 @@ function search_post($search){
 		
 		$row = fetch_comment($comment_id);
 		$comment_post_id = $row['comment_post_id'];
-		$post_comments_rows = fetch_post_all_comments($comment_post_id);
-		$n = sizeof($post_comments_rows);
+		$n = count_rows('comments', 'comment_post_id', $comment_post_id);
 
 		$query = "DELETE FROM comments ";
 		$query .= "WHERE comment_id = $comment_id";
@@ -335,7 +332,6 @@ function search_post($search){
 			die("ERROR: can't delete comment! <br>".$query."<br>".mysqli_error($connection));
 		}else{
 			edit_post_field($comment_post_id, 'post_comment_count', $n-1);
-			header('Location: comments.php');
 		}
 	}
 
@@ -353,9 +349,21 @@ function search_post($search){
 
 			if(!$res){
 				die("ERROR: can't update Comment! <br>".$query."<br>".mysqli_error($connection));
-			}else{
-				header('Location: comments.php');
 			}
+	}
+
+	function edit_comment_field($comment_id, $field, $value){
+		global $connection;
+		$query = "UPDATE comments SET ";
+		$query .= "$field = ";
+		$query .= (is_string($value)) ? "'$value'" : "$value";
+		$query .= " WHERE comment_id = $comment_id";
+		
+		$res = mysqli_query($connection,$query);
+
+		if(!$res){
+			die("ERROR: can't update Comment! <br>".$query."<br>".mysqli_error($connection));
+		}
 	}
 
 	function fetch_post_approved_comments($post_id){
@@ -403,7 +411,7 @@ function delete_post_comments($post_id){
 		}
 	}
 
-#Comments - CRUD - e
+#Comments - CRUD - end
 
 
 #users - CRUD - start
@@ -421,14 +429,6 @@ function delete_post_comments($post_id){
 			$rows[] = $row;
 		} 
 		return $rows;
-	}
-
-	function total_users(){
-		global $connection;
-		$query = "SELECT * FROM users";
-		$res = mysqli_query($connection, $query);
-		
-		return mysqli_num_rows($res);
 	}
 
 	function fetch_user($user_id){
@@ -464,7 +464,7 @@ function delete_post_comments($post_id){
 		
 		if(!$res){
 			die("ERROR: can't add user! <br>".$query."<br>".mysqli_error($connection));
-		}
+		}else return true;
 	}
 
 	function delete_user($user_id){
@@ -475,9 +475,7 @@ function delete_post_comments($post_id){
 		
 		if(!$res){
 			die("ERROR: can't delete user! <br>".$query."<br>".mysqli_error($connection));
-		}else{
-				header('Location: users.php');
-			}
+		}
 	}
 
 	function edit_user($user_id, $user_fields){
@@ -508,14 +506,13 @@ function delete_post_comments($post_id){
 
 			if(!$res){
 				die("ERROR: can't update user! <br>".$query."<br>".mysqli_error($connection));
-			}
+			}else return true;
 	}
 	function clone_user($user_id){
 		global $connection;
 
 		$row = fetch_user($user_id);
 		add_user($row);
-		header('Location: users.php');
 	}
 
 function fetch_admin_users(){
@@ -542,12 +539,65 @@ function count_rows($tablename, $condition = '', $value = ''){
 	$query = "SELECT * FROM $tablename";
 	
 	if(!empty($condition) && !empty($value)){
-		$query .= " WHERE $condition = '$value'";
+		$query .= " WHERE $condition = ";
+		$query .= (is_string($value)) ? "'$value'" : "$value";
 	}
+	
 	$res = mysqli_query($connection, $query);
 	if(!$res){
 		die("ERROR: Can't count rows from $tablename.<br>".$query."<br>".mysqli_error($connection));
 	}
 	return mysqli_num_rows($res);
+	
+}
+
+function fetch_rows($tablename, $condition = '', $value = ''){
+	global $connection;
+		
+		$query = "SELECT * FROM $tablename";
+		if(!empty($condition) && !empty($value)){
+			$query .= " WHERE $condition = ";
+			$query .= (is_string($value)) ? "'$value'" : "$value";;			
+		}
+	
+		$res = mysqli_query($connection,$query);
+		if(!$res){
+				die("ERROR: Can't fetch row/s from $tablename.<br>".$query."<br>".mysqli_error($connection));
+		}
+		$rows = array();
+
+		while($row = mysqli_fetch_assoc($res)){
+			$rows[] = $row;
+		}
+	
+	if(count($rows) === 1) return $rows[0];
+	else return $rows;
+}
+
+function delete_rows($tablename, $condition, $value){
+	global $connection;
+		
+		$query = "DELETE * FROM $tablename";
+		$query .= " WHERE $condition = ";
+		$query .= (is_string($value)) ? "'$value'" : "$value";;			
+	
+		$res = mysqli_query($connection,$query);
+		if(!$res){
+			die("ERROR: Can't delete row/s from $tablename.<br>".$query."<br>".mysqli_error($connection));
+		}
+}
+
+function get_columns($tablename){
+	global $db_name, $connection;
+	$query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS ";
+	$query .= "WHERE TABLE_SCHEMA = '$db_name' AND TABLE_NAME = '$tablename'";
+	$res = mysqli_query($connection,$query);
+	
+	$rows = array();
+	while($row = mysqli_fetch_assoc($res)){
+		$rows[] = $row;
+	}
+	
+	return array_column($rows, 'COLUMN_NAME');
 	
 }

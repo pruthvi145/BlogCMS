@@ -36,20 +36,17 @@
 <div class="container">
 	<div class="row">
 		<div class="col-lg-8">
-
 			<h1>
-				<?php echo $post_title ?>
+			<?php echo $post_title ?>
+			<?php if(is_loggedin() && is_admin()): ?>
+				<a href="admin/post.php?p_id=<?php echo $post_id ?>" class="btn btn-primary">Edit post</a>
+			<?php endif; ?>
 			</h1>
-
-			<p class="lead"> by <a href="#">
-					<?php echo $post_author ?></a></p>
+			<p class="lead"> by <a href="#"><?php echo $post_author ?></a></p>
 			<hr>
-
-			<p><span class="glyphicon glyphicon-time"></span> Posted on
-				<?php echo $post_date ?> at 9:00 PM</p>
+			<p><span class="glyphicon glyphicon-time"></span> Posted on<?php echo $post_date ?> at 9:00 PM</p>
 			<hr>
-
-			<img height="300" src="imgs/<?php echo $post_image ?>" alt="">
+			<img class="img-responsive" src="imgs/<?php echo $post_image ?>" alt="">
 			<hr>
 
 			<!-- Post Content -->
@@ -85,6 +82,9 @@
 
 			<!-- Posted Comments -->
 			<?php $comment_rows = fetch_post_approved_comments($post_id); ?>
+			<?php if(empty($comment_rows)): ?>
+			<div class="alert alert-info" role="alert">No comments yet!</div>
+			<?php endif; ?>
 			<?php foreach($comment_rows as $comment_row): ?>
 			<?php 
 				$author = $comment_row['comment_author'];

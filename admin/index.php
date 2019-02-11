@@ -2,6 +2,7 @@
 <?php 
 
 	$total_posts = count_rows('posts');
+	$published_posts = count_rows('posts','post_status', 'published');
 	$draft_posts = count_rows('posts','post_status', 'draft');
 	$total_comments = count_rows('comments');
 	$pending_comments = count_rows('comments','comment_status', 'unapproved');
@@ -134,12 +135,13 @@
 						var data = google.visualization.arrayToDataTable([
 							['Data', 'Counts'],
 							['Posts', <?php echo $total_posts ?>],
+							['Published Posts', <?php echo $published_posts ?>],
 							['Draft Posts', <?php echo $draft_posts ?>],
 							['Comments', <?php echo $total_comments ?>],
 							['Pending Comments', <?php echo $pending_comments ?>],
 							['Users', <?php echo $total_users ?>],
 							['Subscribers', <?php echo $subscribers ?>],
-							['Categories', <?php echo $total_categories ?>],
+							['Categories', <?php echo $total_categories ?>]
 						]);
 
 						var options = {

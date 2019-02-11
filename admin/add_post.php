@@ -1,6 +1,6 @@
 <?php include "includes/header.php" ?>
 <?php 
-	
+
 	if(isset($_POST['add_post'])){
 		$post_fields = $_POST;
 		$post_files = $_FILES;
@@ -10,7 +10,15 @@
 		move_uploaded_file($post_image_temp, "../imgs/$post_image");
 		
 		$post_fields['post_image'] = $post_image;
-		add_post($post_fields);
+		
+		if(add_post($post_fields)){
+			$notify = "Post has been Added successfully!";
+			$notifyClass = "alert-info";
+			echo "here is exicuted";
+		}else{
+			$notify = "Sorry! Post can't be creacted due to some reason!";
+			$notifyClass = "alert-danger";
+		}
 	}
 
 ?>
@@ -22,18 +30,21 @@
 	<div id="page-wrapper">
 		<div class="container-fluid">
 			<div class="row">
-				<h1 class="page-header">
-					Posts
-					<small> - Add new post</small>
-				</h1>
+				<h1 class="page-header">Posts<small> - Add new post</small></h1>
+				<?php if(!empty($notify)): ?>
+				<div class="alert <?php echo $notifyClass?>">
+					<?php echo $notify?>
+					<a href="posts.php" class="btn btn-primary">See all posts</a>
+				</div>
+				<?php endif; ?>
 				<form method="post" enctype="multipart/form-data">
 					<div class="form-group">
 						<label for="post_title">Post Title</label>
 						<input type="text" class="form-control" name="post_title">
 					</div>
-					<div class="form-group">
+					<div class="input-group">
 						<label for="post_cat_id">Select Category</label>
-						<select name="post_cat_id" id="">
+						<select name="post_cat_id" id="" class="form-control">
 						<?php $cat_rows = fetch_all_categories(); ?>
 						<?php foreach($cat_rows as $cat_row): ?>
 						<?php 
@@ -47,25 +58,30 @@
 						<?php endforeach; ?>
 						</select>
 					</div>
+					<div class="form-group"></div>
 					<div class="form-group">
 						<label for="post_author">Post Author</label>
 						<input type="text" class="form-control" name="post_author">
 					</div>
 					<div class="form-group">
-						<label for="post_image">Post Title</label>
-						<input type="file" class="form-control" name="post_image">
+						<label for="post_image">Post Image</label>
+						<input type="file" name="post_image">
 					</div>
 					<div class="form-group">
 						<label for="post_tags">Post Tags</label>
 						<input type="text" class="form-control" name="post_tags">
 					</div>
-					<div class="form-group">
-						<label for="post_tags">Post Status</label>
-						<input type="text" class="form-control" name="post_status">
+					<div class="input-group">
+						<label for="post_status"> Select Status </label>
+						<select name="post_status" class="form-control">
+							<option value="published">Published</option>
+							<option value="Draft">Draft</option>
+						</select>
 					</div>
+					<div class="form-group"></div>
 					<div class="form-group">
 						<label for="post_content">Post Content</label>
-						<textarea class="form-control " name="post_content" id="body" cols="30" rows="10"></textarea>
+						<textarea class="form-control " name="post_content" id="editor"></textarea>
 					</div>
 					<button type="submit" class="btn btn-primary" name="add_post">Add Post</button>
 				</form>

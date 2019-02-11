@@ -10,7 +10,15 @@
 		move_uploaded_file($user_image_temp, "../imgs/user_imgs/$user_image");
 		
 		$user_fields['user_image'] = $user_image;
-		add_user($user_fields);
+	
+		if(add_user($user_fields)){
+			$notify = "User has been Created successfully!";
+			$notifyClass = "alert-info";
+			echo "here is exicuted";
+		}else{
+			$notify = "Sorry! User can't be Created due to some reason!";
+			$notifyClass = "alert-danger";
+		}
 	}
 
 ?>
@@ -23,6 +31,12 @@
 		<div class="container-fluid">
 			<div class="row">
 				<h1 class="page-header">user<small> - Add new user</small> </h1>
+				<?php if(!empty($notify)): ?>
+				<div class="alert <?php echo $notifyClass?>">
+					<?php echo $notify?>
+					<a href="users.php" class="btn btn-primary">See all users</a>
+				</div>
+				<?php endif; ?>
 				<form method="post" enctype="multipart/form-data">
 					<div class="form-group">
 						<label for="username">Username</label>
@@ -50,17 +64,19 @@
 					</div>
 					<div class="form-group">
 						<label for="user_image">User Image</label>
-						<input type="file" class="form-control" name="user_image">
+						<input type="file" name="user_image">
 					</div>
 
-					<div class="form-group">
+					<div class="input-group">
 						<label for="user_role">Select Role</label>
-						<select name="user_role" id="">
+						<select name="user_role" class="form-control">
 							<option value="admin">Admin</option>
 							<option value="author">author</option>
 							<option value="editor">editor</option>
 							<option value="subscriber" selected="selected">subscriber</option>
 						</select>
+					</div>
+					<div class="form-group">
 					</div>
 					<button type="submit" class="btn btn-primary" name="add_user">Add user</button>
 				</form>

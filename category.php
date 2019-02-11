@@ -18,7 +18,10 @@
 		<!-- Blog Entries Column -->
 		<div class="col-md-8">
 			<h1 class="page-header">Category <small>- <?php echo $cat_title; ?></small></h1>
-			<?php $rows = fetch_category_posts($cat_id); ?>			
+			<?php $rows = fetch_category_posts($cat_id); ?>	
+			<?php if(empty($rows)): ?>
+				<h3 class="alert alert-info" role="alert">No Post found!</h3>
+			<?php endif; ?>		
 			<?php foreach($rows as $row): ?>
 			<?php 
 						
@@ -43,17 +46,11 @@
 				</p>
 				<p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
 				<hr>
-				<img height="300"  src="imgs/<?php echo $post_image ?>" alt="">
+				<a href="post.php?p_id=<?php echo $post_id ?>"><img class="img-responsive"  src="imgs/<?php echo $post_image ?>" alt=""></a>
 				<hr>
-				<p style="overflow: hidden; height:40px"><?php echo $post_content ?></p>
-				
-				<a class="btn btn-primary" href="post.php?p_id=<?php echo $post_id ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-
+				<p><?php echo substr($post_content, 0, 100) ?>...</p>
 				<hr>
 			<?php endforeach; ?>
-			<?php if(!$rows): ?>
-				<h2>No Post Found!</h2>
-			<?php endif; ?>
 		</div>
 
 		<!-- Blog Sidebar Widgets Column -->

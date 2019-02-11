@@ -1,13 +1,19 @@
 <?php include "includes/header.php" ?>
 
 	<?php 
-		if(isset($_GET['delete'])){
-			$user_id = $_GET['delete'];
-			delete_user($user_id);
-		}elseif(isset($_GET['clone'])){
-			$user_id = $_GET['clone'];
-			clone_user($user_id);
+		if(isset($_POST['submit_action'])){
+		$action = $_POST['action'];
+			
+		if(!isset($_POST['user_ids'])){
+			$notify = "No user is selected!";
+			$notifyClass = "alert-danger";
 		}
+		$user_ids = $_POST['user_ids'];
+		
+			foreach($user_ids as $user_id){
+				delete_user($user_id);
+			}
+	}	
 	?>
 
 <div id="wrapper">
@@ -15,13 +21,26 @@
 	<div id="page-wrapper">
 		<div class="container-fluid">
 			<div class="row">
-				<h1 class="page-header">
-					Users
-					<small>no subheading asshole!</small>
+				<h1 class="page-header">Users<small> no subheading asshole!</small>
 				</h1>
+				<?php if(!empty($notify)): ?>
+				<div class="alert <?php echo $notifyClass?>"><?php echo $notify?></div>
+				<?php endif; ?>
+				<form action="" method="post">
 				<table class="table table-hover table-bordered">
+				<div class="col-xs-4" style="margin-bottom: 20px;">
+						<select class="form-control" name="action" id="">
+							<option value="">Select Options</option>
+							<option value="delete">Delete</option>
+						</select>
+						</div>
+						<div class="col-xs-4">
+							<input type="submit" name="submit_action" class="btn btn-success" value="Apply">
+							<a href="add_user.php" class="btn btn-primary">Add new</a>
+						</div>
 					<thead>
 						<tr>
+							<th><input type="checkbox" id="checkAll"></th>
 							<th>#</th>
 							<th>username</th>
 							<th>Firstname</th>
@@ -48,6 +67,7 @@
 					
 					?>
 						<tr>
+							<td scope="col"><input type="checkbox" class="checkBox" name='user_ids[]' value="<?php echo $user_id ?>"></td>
 							<td scope="col"><?php echo $user_id ?></td>
 							<td scope="col"><?php echo $username ?></td>
 							<td scope="col"><?php echo $user_firstname ?></td>
@@ -56,12 +76,11 @@
 							<td scope="col"><img src="../imgs/user_imgs/<?php echo $user_image ?>" alt="<?php echo $user_image ?>" width="100"></td>
 							<td scope="col"><?php echo $user_role ?></td>
 							<td scope="col"><a href="user.php?u_id=<?php echo $user_id ?>">Edit</a></td>
-							<td scope="col"><a href="?delete=<?php echo $user_id ?>">Delete</a></td>
-							<td scope="col"><a href="?clone=<?php echo $user_id ?>">Clone</a></td>
 						</tr>
 						<?php endforeach; ?>
 					</tbody>
 				</table>
+				</form>
 			</div>
 		</div>
 	</div>

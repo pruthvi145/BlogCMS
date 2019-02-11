@@ -1,11 +1,15 @@
 <?php include "function.php" ?>
 <?php session_start(); ?>
 <?php
-	if(!isset($_SESSION['user_id'])){
+	if(!is_loggedin()){
 		header('Location: ../index.php');
+	}elseif(!is_admin()){
+		header('Location: includes/logout.php');
 	}
+
 	$user_id = $_SESSION['user_id'];
 	$user = fetch_user($user_id);
+	
 
 ?>
 <!DOCTYPE html>
@@ -27,6 +31,8 @@
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 	 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	 
+	 <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
 </head>
 
 <body>

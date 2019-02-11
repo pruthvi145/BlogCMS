@@ -17,10 +17,15 @@
 			$user_image = $row['user_image'];
 		}
 		
-		
 		$user_fields['user_image'] = $user_image;
-		
-		edit_user($user_id, $user_fields);
+	
+		if(edit_user($user_id, $user_fields)){
+			$notify = "User been Updated successfully!";
+			$notifyClass = "alert-success";
+		}else{
+			$notify = "Sorry! User can't be updateed due to some reason!";
+			$notifyClass = "alert-danger";
+		}
 	}
 
 ?>
@@ -46,6 +51,12 @@
 					$user_role= $row['user_role'];
 
 				?>
+				<?php if(!empty($notify)): ?>
+				<div class="alert <?php echo $notifyClass?>">
+					<?php echo $notify?>
+					<a href="users.php" class="btn btn-primary">See all users</a>
+				</div>
+				<?php endif; ?>
 				<form method="post" enctype="multipart/form-data">
 					<div class="form-group">
 						<label for="username">Username</label>
@@ -53,38 +64,42 @@
 					</div>
 					<div class="form-group">
 						<label for="user_password">Password</label>
-						<input type="password" class="form-control" name="user_password"  value="<?php echo $user_password ?>">
+						<input type="password" class="form-control" name="user_password" value="<?php echo $user_password ?>">
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="user_firstname">First Name</label>
-							<input type="text" class="form-control" name="user_firstname"  value="<?php echo $user_firstname ?>">
+							<input type="text" class="form-control" name="user_firstname" value="<?php echo $user_firstname ?>">
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="form-group">
 							<label for="user_lastname">Last Name</label>
-							<input type="text" class="form-control" name="user_lastname"  value="<?php echo $user_lastname?>">
+							<input type="text" class="form-control" name="user_lastname" value="<?php echo $user_lastname?>">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="user_email">Email</label>
-						<input type="text" class="form-control" name="user_email"  value="<?php echo $user_email ?>">
+						<input type="text" class="form-control" name="user_email" value="<?php echo $user_email ?>">
 					</div>
 					<div class="form-group">
-						<div style="margin:20px 0"><b>user Image</b></div>
+						<label for="user_image">User Image</label>
+						<br>
 						<img src="../imgs/user_imgs/<?php echo $user_image ?>" alt="User Avtar" height="100px">
-						<input type="file" class="form-control" name="user_image">
 					</div>
 					<div class="form-group">
+						<input type="file" name="user_image">
+					</div>
+					<div class="input-group">
 						<label for="user_role">Post Status</label>
-						<select name="user_role">
-							<option <?php echo ($user_role == "admin") ? 'selected = "selected"' : '' ?> value="admin">Admin</option>
-							<option <?php echo ($user_role == "author") ? 'selected = "selected"' : '' ?> value="author">Author</option>
-							<option <?php echo ($user_role == "editor") ? 'selected = "selected"' : '' ?> value="editor">Editor</option>
-							<option <?php echo ($user_role == "subscriber") ? 'selected = "selected"' : '' ?> value="subscriber">Subscriber</option>
+						<select name="user_role" class="form-control">
+							<option <?php echo ($user_role=="admin" ) ? 'selected = "selected"' : '' ?> value="admin">Admin</option>
+							<option <?php echo ($user_role=="author" ) ? 'selected = "selected"' : '' ?> value="author">Author</option>
+							<option <?php echo ($user_role=="editor" ) ? 'selected = "selected"' : '' ?> value="editor">Editor</option>
+							<option <?php echo ($user_role=="subscriber" ) ? 'selected = "selected"' : '' ?> value="subscriber">Subscriber</option>
 						</select>
 					</div>
+					<div class="form-group"></div>
 					<button type="submit" class="btn btn-primary" name="edit_user">Edit user</button>
 				</form>
 			</div>
