@@ -15,8 +15,10 @@
 			<?php 
 						
 				$post_id = $row['post_id'];
-				$post_author = $row['post_author'];
-				$post_title = $row['post_title'];
+				$post_author_id = $row['post_author_id'];
+				$post_author_row = fetch_user($post_author_id);
+				$post_author = $post_author_row['user_firstname']." ".$post_author_row['user_lastname'];
+							$post_title = $row['post_title'];
 						
 				$post_image = $row['post_image'];
 				$post_tags = $row['post_tags'];
@@ -28,7 +30,7 @@
 			<!-- Blog Post -->
 			<h2><a href="post.php?p_id=<?php echo $post_id ?>"><?php echo $post_title ?></a></h2>
 			
-			<p class="lead">by <a href="index.php"><?php echo $post_author ?></a></p>
+			<p class="lead">by <a href="author_posts.php?u_id=<?php echo $post_author_id ?>"><?php echo $post_author ?></a></p>
 			<p><span class="glyphicon glyphicon-time"></span> Posted on <?php echo $post_date ?></p>
 			<hr>
 			<a href="post.php?p_id=<?php echo $post_id ?>"><img class="img-responsive" src="imgs/<?php echo $post_image ?>" alt="postimage"></a>

@@ -4,7 +4,9 @@
 <?php 
 
 	$post_id = $_GET['p_id'];
-
+	if(!is_my_post($post_id) && !is_admin()){
+		header('Location: posts.php');
+	}
 	if(isset($_POST['edit_post'])){
 		$post_fields = $_POST;
 		$post_files = $_FILES;
@@ -51,7 +53,9 @@
 				<?php 
 					
 					$post_id = $row['post_id'];
-					$post_author = $row['post_author'];
+					$post_author_id = $row['post_author_id'];
+					$post_author_row = fetch_user($post_author_id);
+					$post_author = $post_author_row['user_firstname']." ".$post_author_row['user_lastname'];
 					$post_title = $row['post_title'];
 				
 					$post_cat_id = $row['post_cat_id'];	
@@ -98,7 +102,7 @@
 					<div class="form-group"></div>
 					<div class="form-group">
 						<label for="post_author">Post Author</label>
-						<input type="text" class="form-control" name="post_author" value="<?php echo $post_author ?>">
+						<input type="text" class="form-control" value="<?php echo $post_author ?>" disabled>
 					</div>
 					<div class="form-group">
 						<label for="post_image"></label>

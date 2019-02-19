@@ -130,6 +130,7 @@
 					</li>
 				</ul>
 			</li>
+			<?php if(is_admin()): ?>
 				<li>
 				<a href="javascript:;" data-toggle="collapse" data-target="#users"><i class="fa fa-fw fa-arrows-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
 				<ul id="users" class="collapse">
@@ -141,6 +142,7 @@
 					</li>
 				</ul>
 			</li>
+			<?php endif; ?>
 			<li class="active">
 				<a href="categories.php"><i class="fa fa-fw fa-file"></i>Catagories</a>
 			</li>

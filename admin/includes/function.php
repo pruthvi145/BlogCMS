@@ -13,7 +13,18 @@
 		$user_id = (empty($user_id)) ? $_SESSION['user_id'] : $user_id;
 		$user = fetch_user($user_id);
 		return ($user['user_role'] === "admin") ? true : false;
-		} 
+	} 
+	function user_role($user_id){
+		$user = fetch_user($user_id);
+		return $user['user_role'];
+	}
+	function current_user_id(){
+		return $_SESSION['user_id'];
+	}
+
+function current_user(){
+	return fetch_user(current_user_id());
+}
 
 #Categories - CRUD - start
 
@@ -146,7 +157,7 @@
 		
 		$post_cat_id = $post_fields['post_cat_id'];		
 		$post_title = $post_fields['post_title'];
-		$post_author = $post_fields['post_author'];			
+		$post_author_id = $post_fields['post_author_id'];			
 		$post_date = date('d-m-y');
 		$post_image = $post_fields['post_image'];
 		$post_content = $post_fields['post_content'];
@@ -154,8 +165,8 @@
 		$post_comment_count = 0;
 		$post_status = $post_fields['post_status'];
 		
-		$query = "INSERT INTO posts(post_cat_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_comment_count, post_status) ";
-		$query .= "VALUES($post_cat_id, '$post_title', '$post_author', $post_date, '$post_image', '$post_content', '$post_tags', $post_comment_count, '$post_status')";
+		$query = "INSERT INTO posts(post_cat_id, post_title, post_author_id, post_date, post_image, post_content, post_tags, post_comment_count, post_status) ";
+		$query .= "VALUES($post_cat_id, '$post_title', $post_author_id, $post_date, '$post_image', '$post_content', '$post_tags', $post_comment_count, '$post_status')";
 		$res = mysqli_query($connection,$query);
 		
 		if(!$res){
@@ -179,8 +190,7 @@
 			global $connection;
 		
 			$post_cat_id = $post_fields['post_cat_id'];		
-			$post_title = $post_fields['post_title'];
-			$post_author = $post_fields['post_author'];			
+			$post_title = $post_fields['post_title'];		
 			$post_date = date('dd-mm-yyyy');
 			$post_image = $post_fields['post_image'];
 			$post_content = $post_fields['post_content'];
@@ -190,7 +200,6 @@
 			$query = "UPDATE posts SET ";
 			$query .= "post_cat_id = $post_cat_id, ";
 			$query .= "post_title = '$post_title', ";
-			$query .= "post_author = '$post_author', ";
 			$query .= "post_date = $post_date, ";
 			$query .= "post_content = '$post_content', ";
 			$query .= "post_image = '$post_image', ";
@@ -241,6 +250,23 @@
 		} 
 		return $rows;
 	}
+
+	function fetch_author_posts($u_id){
+		global $connection;
+		$query = "SELECT * FROM posts ";
+		$query .= "WHERE post_author_id = $u_id";
+		$res = mysqli_query($connection, $query);
+
+		if(!$res){
+				die("ERROR: can't fetch category Posts! <br>".$query."<br>".mysqli_error($connection));
+		}
+		$rows = array();
+		while($row = mysqli_fetch_assoc($res)){
+			$rows[] = $row;
+		} 
+		return $rows;
+	}
+
 
 function search_post($search){
 	
@@ -411,6 +437,7 @@ function delete_post_comments($post_id){
 		}
 	}
 
+
 #Comments - CRUD - end
 
 
@@ -449,17 +476,15 @@ function delete_post_comments($post_id){
 		global $connection;
 		
 		$username = $user_fields['username'];
-		$user_password= $user_fields['user_password'];
-		$user_firstname = $user_fields['user_firstname'];
-		$user_lastname = $user_fields['user_lastname'];
+		$user_password = md5($user_fields['user_password']);
+		$user_firstname = (isset($user_fields['user_firstname'])) ? $user_fields['user_firstname'] : "";
+		$user_lastname = (isset($user_fields['user_lastname'])) ? $user_fields['user_lastname'] : "";
 		$user_email = $user_fields['user_email'];
-		$user_image = $user_fields['user_image'];
+		$user_image = (isset($user_fields['user_image'])) ? $user_fields['user_image'] : "";
 		$user_role= $user_fields['user_role'];
-		//$radSalt = $user_fields['randSalt'];
-		$randSalt = "passenc";
 
-		$query = "INSERT INTO users(username, user_password, user_firstname, user_lastname, user_email, user_image, user_role, randSalt) ";
-		$query .= "VALUES('$username', '$user_password', '$user_firstname', '$user_lastname', '$user_email', '$user_image', '$user_role', '$randSalt')";
+		$query = "INSERT INTO users(username, user_password, user_firstname, user_lastname, user_email, user_image, user_role) ";
+		$query .= "VALUES('$username', '$user_password', '$user_firstname', '$user_lastname', '$user_email', '$user_image', '$user_role')";
 		$res = mysqli_query($connection,$query);
 		
 		if(!$res){
@@ -482,7 +507,7 @@ function delete_post_comments($post_id){
 			global $connection;
 		
 			$username = $user_fields['username'];
-			$user_password= $user_fields['user_password'];
+			$user_password= md5($user_fields['user_password']);
 			$user_firstname = $user_fields['user_firstname'];
 			$user_lastname = $user_fields['user_lastname'];
 			$user_email = $user_fields['user_email'];
@@ -569,9 +594,7 @@ function fetch_rows($tablename, $condition = '', $value = ''){
 		while($row = mysqli_fetch_assoc($res)){
 			$rows[] = $row;
 		}
-	
-	if(count($rows) === 1) return $rows[0];
-	else return $rows;
+	 return $rows;
 }
 
 function delete_rows($tablename, $condition, $value){
@@ -601,3 +624,14 @@ function get_columns($tablename){
 	return array_column($rows, 'COLUMN_NAME');
 	
 }
+
+	function is_my_post($post_id){
+		$rows = fetch_rows('posts','post_author_id', current_user_id());
+		foreach($rows as $row){
+			$this_post_id = $row['post_id'];
+			if($this_post_id == $post_id){
+				return true;
+			}
+		}
+	return false;
+	}

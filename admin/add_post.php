@@ -61,7 +61,13 @@
 					<div class="form-group"></div>
 					<div class="form-group">
 						<label for="post_author">Post Author</label>
-						<input type="text" class="form-control" name="post_author">
+						<?php 
+							$current_user = current_user();
+							$user_id = $current_user['user_id'];
+							$user_name = $current_user['user_firstname']." ".$current_user['user_lastname'];
+						?>
+						<input type="text" class="form-control" value="<?php echo $user_name ?>" disabled>
+						<input type="hidden" class="form-control" name="post_author_id" value="<?php echo $user_id ?>">
 					</div>
 					<div class="form-group">
 						<label for="post_image">Post Image</label>

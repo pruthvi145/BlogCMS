@@ -4,11 +4,11 @@
 	if(!is_loggedin()){
 		header('Location: ../index.php');
 	}elseif(!is_admin()){
-		header('Location: includes/logout.php');
+		#header('Location: includes/logout.php');
 	}
 
 	$user_id = $_SESSION['user_id'];
-	$user = fetch_user($user_id);
+	$user = fetch_user(current_user_id());
 	
 
 ?>

@@ -1,4 +1,7 @@
 <?php include "includes/header.php" ?>
+<?php if(!is_admin()){
+	header('Location: index.php');
+} ?>
 <?php 
 	
 	if(isset($_POST['add_user'])){

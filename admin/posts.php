@@ -32,6 +32,19 @@
 				<?php if(!empty($notify)): ?>
 				<div class="alert <?php echo $notifyClass?>"><?php echo $notify?></div>
 				<?php endif; ?>
+				<?php
+				if(!is_admin() || isset($_GET['my_posts'])){
+					$rows = fetch_rows('posts', 'post_author_id',current_user_id());
+					$btnlink = "posts.php";
+					$btntxt = "View all";
+				}else{
+					$rows = fetch_all_posts(); 
+					$btnlink = "?my_posts";
+					$btntxt = "View My Posts";
+				}
+				?>
+				
+					
 				<form action="" method="post">
 					<table class="table table-hover table-bordered">
 						<div class="col-xs-4" style="margin-bottom: 20px;">
@@ -46,8 +59,11 @@
 						<div class="col-xs-4">
 							<input type="submit" name="submit_action" class="btn btn-success" value="Apply">
 							<a href="add_post.php" class="btn btn-primary">Add new</a>
+							<?php if(is_admin()): ?>
+								<a href="<?php echo $btnlink ?>" class="btn btn-primary"><?php echo $btntxt ?></a>
+							<?php endif; ?>
 						</div>
-
+							
 						<thead>
 							<tr>
 								<th scope="col"><input type="checkbox" id="checkAll"></th>
@@ -64,12 +80,14 @@
 							</tr>
 						</thead>
 						<tbody>
-							<?php $rows = fetch_all_posts(); ?>
+						
 							<?php foreach($rows as $row): ?>
-							<?php 
+							<?php
 						
 						$post_id = $row['post_id'];
-						$post_author = $row['post_author'];
+						$post_author_id = $row['post_author_id'];
+						$post_author_row = fetch_user($post_author_id);
+						$post_author = $post_author_row['user_firstname']." ".$post_author_row['user_lastname'];
 						$post_title = $row['post_title'];
 						
 						$post_cat_id = $row['post_cat_id'];
@@ -91,7 +109,7 @@
 									<?php echo $post_id ?>
 								</td>
 								<td scope="col">
-									<?php echo $post_author ?>
+									<a href="<?php echo getRootURI() ?>/author.php?u_id=<?php echo $post_author_id ?>"><?php echo $post_author ?></a>
 								</td>
 								<td scope="col"><a href="<?php echo getRootURI() ?>/post.php?p_id=<?php echo $post_id ?>">
 										<?php echo $post_title ?></a></td>

@@ -20,7 +20,9 @@
 <?php 
 					
 	$post_id = $row['post_id'];
-	$post_author = $row['post_author'];
+	$post_author_id = $row['post_author_id'];
+	$post_author_row = fetch_user($post_author_id);
+	$post_author = $post_author_row['user_firstname']." ".$post_author_row['user_lastname'];
 	$post_title = $row['post_title'];
 				
 	$post_cat_id = $row['post_cat_id'];	
@@ -38,11 +40,11 @@
 		<div class="col-lg-8">
 			<h1>
 			<?php echo $post_title ?>
-			<?php if(is_loggedin() && is_admin()): ?>
+			<?php if(is_loggedin() && is_my_post($post_id) && is_admin()): ?>
 				<a href="admin/post.php?p_id=<?php echo $post_id ?>" class="btn btn-primary">Edit post</a>
 			<?php endif; ?>
 			</h1>
-			<p class="lead"> by <a href="#"><?php echo $post_author ?></a></p>
+			<p class="lead"> by <a href="author_posts.php?u_id=<?php echo $post_author_id ?>"><?php echo $post_author ?></a></p>
 			<hr>
 			<p><span class="glyphicon glyphicon-time"></span> Posted on<?php echo $post_date ?> at 9:00 PM</p>
 			<hr>

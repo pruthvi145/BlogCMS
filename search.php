@@ -20,14 +20,16 @@
 				
 				$post_id = $row['post_id'];
 				$post_title = $row['post_title'];
-				$post_author = $row['post_author'];
+				$post_author_id = $row['post_author_id'];
+				$post_author_row = fetch_user($post_author_id);
+				$post_author = $post_author_row['user_firstname']." ".$post_author_row['user_lastname'];
 				$post_date = $row['post_date'];
 				$post_image = $row['post_image'];
 				$post_content = $row['post_content']; 
 			
 			?>
 
-			<h2><a href="#"><?php echo $post_title ?></a></h2>
+			<h2><a href="post.php?p_id=<?php echo $post_id ?>"><?php echo $post_title ?></a></h2>
 			<p class="lead">by <a href="index.php"><?php echo $post_author ?></a></p>
 			<p><span class="glyphicon glyphicon-time"></span> Posted on<?php echo $post_date ?></p>
 			<hr>

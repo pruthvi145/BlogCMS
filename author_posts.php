@@ -1,12 +1,12 @@
 <?php include "includes/header.php" ?>
 <?php include "includes/navigation.php" ?>
 
-<?php if(isset($_GET['cat_id'])): ?>
+<?php if(isset($_GET['u_id'])): ?>
 <?php 
 
-	$cat_id = $_GET['cat_id'];
-	$row = fetch_category($cat_id);
-	$cat_title = $row['cat_title'];
+	$u_id = $_GET['u_id'];
+	$post_author_row = fetch_user($u_id);
+	$post_author = $post_author_row['user_firstname']." ".$post_author_row['user_lastname'];
 
 ?>
 
@@ -14,10 +14,11 @@
 <div class="container">
 
 	<div class="row">
+		
 		<!-- Blog Entries Column -->
 		<div class="col-md-8">
-			<h1 class="page-header">Category <small>- <?php echo $cat_title; ?></small></h1>
-			<?php $rows = fetch_category_posts($cat_id); ?>	
+			<h1 class="page-header">Author <small>- <?php echo $post_author; ?></small></h1>
+			<?php $rows = fetch_author_posts($u_id); ?>	
 			<?php if(empty($rows)): ?>
 				<h3 class="alert alert-info" role="alert">No Post found!</h3>
 			<?php endif; ?>		
