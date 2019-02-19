@@ -1,6 +1,8 @@
 <?php include "db.php" ?>
 <?php
-
+	
+	define('SITE_TITLE', 'php-newCMS');
+	define('ROOT', 'http://localhost/php-newcms');
 	function is_loggedin(){
 		return (isset($_SESSION['user_id'])) ? true : false;
 	}

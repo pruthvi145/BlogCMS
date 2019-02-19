@@ -1,5 +1,4 @@
 <?php include "admin/includes/function.php" ?>
-<?php include "config.php" ?>
 <?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
