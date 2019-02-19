@@ -109,9 +109,9 @@
 									<?php echo $post_id ?>
 								</td>
 								<td scope="col">
-									<a href="<?php echo getRootURI() ?>/author.php?u_id=<?php echo $post_author_id ?>"><?php echo $post_author ?></a>
+									<a href="<?php echo ROOT ?>/author.php?u_id=<?php echo $post_author_id ?>"><?php echo $post_author ?></a>
 								</td>
-								<td scope="col"><a href="<?php echo getRootURI() ?>/post.php?p_id=<?php echo $post_id ?>">
+								<td scope="col"><a href="<?php echo ROOT ?>/post.php?p_id=<?php echo $post_id ?>">
 										<?php echo $post_title ?></a></td>
 								<td scope="col">
 									<?php echo $post_cat_title ?>

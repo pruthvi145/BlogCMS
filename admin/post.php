@@ -72,7 +72,7 @@
 				<div class="alert <?php echo $notifyClass?>">
 					<?php echo $notify?>
 					<a href="posts.php" class="btn btn-primary">See all posts</a>
-					<a href="<?php echo getRootURI() ?>/post.php?p_id=<?php echo $post_id?>" class="btn btn-primary" target="_blank">view Post</a>
+					<a href="<?php echo ROOT ?>/post.php?p_id=<?php echo $post_id?>" class="btn btn-primary" target="_blank">view Post</a>
 				</div>
 				<?php endif; ?>
 				<form method="post" enctype="multipart/form-data">

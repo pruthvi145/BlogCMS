@@ -84,7 +84,7 @@
 								<td scope="col"><?php echo $comment_author ?></td>
 								<td scope="col"><?php echo substr($comment_content,0,50) ?></td>
 								<td scope="col"><?php echo $comment_email ?></td>
-								<td scope="col"><a href="<?php echo getRootURI() ?>/post.php?p_id=<?php echo $comment_post_id ?>"><?php echo $comment_post_title ?></a></td>
+								<td scope="col"><a href="<?php echo ROOT ?>/post.php?p_id=<?php echo $comment_post_id ?>"><?php echo $comment_post_title ?></a></td>
 								<td scope="col"><?php echo $comment_status ?></td>
 								<td scope="col"><?php echo $comment_date ?></td>
 							</tr>

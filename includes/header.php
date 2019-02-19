@@ -1,4 +1,5 @@
 <?php include "admin/includes/function.php" ?>
+<?php include "config.php" ?>
 <?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,11 +10,12 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>Blog Home - Start Bootstrap Template</title>
+	<title><?php echo SITE_TITLE ?></title>
 
 	<!-- Bootstrap Core CSS -->
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-
+	<!--link href="css/bootstrap.min.css" rel="stylesheet"-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
 	<!-- Custom CSS -->
 	<link href="css/style.css" rel="stylesheet">
 </head>

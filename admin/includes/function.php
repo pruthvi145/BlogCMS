@@ -1,10 +1,6 @@
 <?php include "db.php" ?>
 <?php
 
-	function getRootURI(){
-		return "http://localhost/php-newcms";
-	}
-
 	function is_loggedin(){
 		return (isset($_SESSION['user_id'])) ? true : false;
 	}
@@ -110,7 +106,7 @@ function current_user(){
 
 	function fetch_all_posts(){
 		global $connection;
-		$query = "SELECT * FROM posts";
+		$query = "SELECT * FROM posts ORDER BY post_date DESC";
 		$res = mysqli_query($connection, $query);
 
 		if(!$res){
@@ -125,7 +121,7 @@ function current_user(){
 	function fetch_published_posts(){
 		global $connection;
 		$query = "SELECT * FROM posts ";
-		$query .= "WHERE post_status = 'published'";
+		$query .= "WHERE post_status = 'published' ORDER BY post_date DESC";
 		$res = mysqli_query($connection, $query);
 
 		if(!$res){
@@ -158,15 +154,16 @@ function current_user(){
 		$post_cat_id = $post_fields['post_cat_id'];		
 		$post_title = $post_fields['post_title'];
 		$post_author_id = $post_fields['post_author_id'];			
-		$post_date = date('d-m-y');
 		$post_image = $post_fields['post_image'];
+		//$post_date = date('M dS, Y \a\t g:i A');
+		$post_date = date('Y-m-d H:i:s');
 		$post_content = $post_fields['post_content'];
 		$post_tags = $post_fields['post_tags'];
 		$post_comment_count = 0;
 		$post_status = $post_fields['post_status'];
 		
 		$query = "INSERT INTO posts(post_cat_id, post_title, post_author_id, post_date, post_image, post_content, post_tags, post_comment_count, post_status) ";
-		$query .= "VALUES($post_cat_id, '$post_title', $post_author_id, $post_date, '$post_image', '$post_content', '$post_tags', $post_comment_count, '$post_status')";
+		$query .= "VALUES($post_cat_id, '$post_title', $post_author_id, '$post_date', '$post_image', '$post_content', '$post_tags', $post_comment_count, '$post_status')";
 		$res = mysqli_query($connection,$query);
 		
 		if(!$res){
@@ -191,7 +188,8 @@ function current_user(){
 		
 			$post_cat_id = $post_fields['post_cat_id'];		
 			$post_title = $post_fields['post_title'];		
-			$post_date = date('dd-mm-yyyy');
+			//$post_date = date('M dS, Y \a\t g:i A');
+			$post_date = date('Y-m-d H:i:s');
 			$post_image = $post_fields['post_image'];
 			$post_content = $post_fields['post_content'];
 			$post_tags = $post_fields['post_tags'];
@@ -200,7 +198,7 @@ function current_user(){
 			$query = "UPDATE posts SET ";
 			$query .= "post_cat_id = $post_cat_id, ";
 			$query .= "post_title = '$post_title', ";
-			$query .= "post_date = $post_date, ";
+			$query .= "post_date = '$post_date', ";
 			$query .= "post_content = '$post_content', ";
 			$query .= "post_image = '$post_image', ";
 			$query .= "post_tags = '$post_tags', ";
@@ -238,7 +236,7 @@ function current_user(){
 	function fetch_category_posts($cat_id){
 		global $connection;
 		$query = "SELECT * FROM posts ";
-		$query .= "WHERE post_cat_id = $cat_id";
+		$query .= "WHERE post_cat_id = $cat_id ORDER BY post_date DESC";
 		$res = mysqli_query($connection, $query);
 
 		if(!$res){
@@ -254,7 +252,7 @@ function current_user(){
 	function fetch_author_posts($u_id){
 		global $connection;
 		$query = "SELECT * FROM posts ";
-		$query .= "WHERE post_author_id = $u_id";
+		$query .= "WHERE post_author_id = $u_id ORDER BY post_date DESC";
 		$res = mysqli_query($connection, $query);
 
 		if(!$res){
@@ -272,7 +270,7 @@ function search_post($search){
 	
 	global $connection;
 	$query = "SELECT * FROM posts WHERE post_tags LIKE '%$search%' ";	
-	$query .= "OR post_title LIKE '%$search%' ";	
+	$query .= "OR post_title LIKE '%$search%' ORDER BY post_date DESC";	
 	$res = mysqli_query($connection, $query);
 	
 	if(!$res){
@@ -578,12 +576,13 @@ function count_rows($tablename, $condition = '', $value = ''){
 
 function fetch_rows($tablename, $condition = '', $value = ''){
 	global $connection;
-		
+		$idq = substr($tablename,0,-1) . '_id';
 		$query = "SELECT * FROM $tablename";
 		if(!empty($condition) && !empty($value)){
 			$query .= " WHERE $condition = ";
 			$query .= (is_string($value)) ? "'$value'" : "$value";;			
 		}
+		//$query .= " ORDER BY $idq DESC";
 	
 		$res = mysqli_query($connection,$query);
 		if(!$res){
@@ -634,4 +633,11 @@ function get_columns($tablename){
 			}
 		}
 	return false;
+	}
+
+	function date_to_string($date){
+		$d = new DateTime($date);
+		$r = $d->format('M dS, Y \a\t g:i A');
+
+		return ($r) ? $r : false;
 	}

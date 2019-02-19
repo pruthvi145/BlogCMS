@@ -1,21 +1,14 @@
 <footer>
 	<div class="row">
 		<div class="col-lg-12">
-			<p>Copyright &copy; Your Website 2014</p>
+			<p>Copyright &copy; <?php echo SITE_TITLE ?> <?php echo date('Y')?>.</p>
 		</div>
-		<!-- /.col-lg-12 -->
 	</div>
-	<!-- /.row -->
 </footer>
-
 </div>
-<!-- /.container -->
-
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 </body>
 

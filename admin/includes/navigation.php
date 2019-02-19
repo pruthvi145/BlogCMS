@@ -108,7 +108,7 @@
 				</li>
 				<li class="divider"></li>
 				<li>
-					<a href="<?php echo getRootURI(); ?>/admin/includes/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+					<a href="<?php echo ROOT; ?>/admin/includes/logout.php"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
 				</li>
 			</ul>
 		</li>

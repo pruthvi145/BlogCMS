@@ -1,3 +1,11 @@
 body{
     padding-top: 5em;
 }
+
+.card + .card{
+    margin: 2em 0;
+}
+
+.post-info p{
+    /*font-size: 14px;*/
+}
