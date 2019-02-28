@@ -1,6 +1,6 @@
 <?php include "includes/header.php" ?>
 <?php if(!is_admin()){
-	header('Location: index.php');
+	redirect('Location: index.php');
 } ?>
 <?php if(isset($_GET['u_id'])): ?>
 <?php 
@@ -111,6 +111,6 @@
 </div>
 <!-- /#wrapper -->
 <?php else: ?>
-<?php header('Location: users.php'); ?>
+<?php redirect('Location: users.php'); ?>
 <?php endif; ?>
 <?php include "includes/footer.php" ?>

@@ -1,6 +1,6 @@
-<?php include "../admin/includes/function.php" ?>
-
 <?php session_start(); ?>
+<?php ob_start(); ?>
+<?php include "../admin/includes/function.php" ?>
 <?php
 
 if(isset($_POST['login'])){
@@ -20,15 +20,16 @@ if(isset($_POST['login'])){
 		if($login_username == $username && $login_password == $user_password){
 			$found_user = true;
 			$_SESSION['user_id'] = $user_id;
-			header('Location: ../admin');
+			redirect('Location: ../admin');
 		}
 	}
 	if(!$found_user){
-		header('Location: ../index.php');
+		redirect('Location: ../index.php');
 	}
 	
 }else{
-	header('Location: ../index.php');
+	redirect('Location: ../index.php');
 }
 
+ob_end_flush();
 ?>

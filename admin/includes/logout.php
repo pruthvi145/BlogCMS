@@ -1,8 +1,8 @@
 <?php session_start(); ?>
-
+<?php include './function.php' ?>
 <?php
 
 $_SESSION['user_id'] = null;
-header('Location: ../../index.php');
+redirect('Location: ../../index.php');
 
 ?>

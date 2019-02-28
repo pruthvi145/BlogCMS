@@ -1,6 +1,6 @@
 <?php include "includes/header.php" ?>
 <?php if(!is_admin()){
-	header('Location: index.php');
+	redirect('Location: index.php');
 } ?>
 
 	<?php 
@@ -45,13 +45,13 @@
 						<tr>
 							<th><input type="checkbox" id="checkAll"></th>
 							<th>#</th>
-							<th>username</th>
+							<th>Username</th>
 							<th>Firstname</th>
 							<th>Lastname</th>
-							<th>password</th>
-							<th>email</th>
-							<th>image</th>
-							<th>role</th>
+							<!--th>Password</th-->
+							<th>Email</th>
+							<th>Avatar</th>
+							<th>Role</th>
 
 						</tr>
 					</thead>
@@ -64,7 +64,7 @@
 						$username = $row['username'];
 						$user_firstname = $row['user_firstname'];
 						$user_lastname = $row['user_lastname'];
-						$user_password = $row['user_password'];
+						//$user_password = $row['user_password'];
 						$user_email = $row['user_email'];
 						$user_image = $row['user_image'];
 						$user_role= $row['user_role'];
@@ -77,7 +77,7 @@
 							<td scope="col"><?php echo $username ?></td>
 							<td scope="col"><?php echo $user_firstname ?></td>
 							<td scope="col"><?php echo $user_lastname ?></td>
-							<td scope="col"><?php echo $user_password ?></td>
+							<!--td scope="col"><?php echo $user_password ?></td-->
 							<td scope="col"><?php echo $user_email ?></td>
 							<td scope="col"><img src="../imgs/user_imgs/<?php echo $user_image ?>" alt="<?php echo $user_image ?>" width="100"></td>
 							<td scope="col"><?php echo $user_role ?></td>

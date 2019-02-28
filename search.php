@@ -47,6 +47,6 @@
 	</div>
 </div>
 <?php else: ?>
-<?php header('Location: index.php'); ?>
+<?php redirect('Location: index.php'); ?>
 <?php endif; ?>
 <?php include "includes/footer.php" ?>

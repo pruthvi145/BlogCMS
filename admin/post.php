@@ -5,7 +5,7 @@
 
 	$post_id = $_GET['p_id'];
 	if(!is_my_post($post_id) && !is_admin()){
-		header('Location: posts.php');
+		redirect('Location: posts.php');
 	}
 	if(isset($_POST['edit_post'])){
 		$post_fields = $_POST;
@@ -135,6 +135,6 @@
 </div>
 <!-- /#wrapper -->
 <?php else: ?>
-<?php header('Location: posts.php'); ?>
+<?php redirect('Location: posts.php'); ?>
 <?php endif; ?>
 <?php include "includes/footer.php" ?>

@@ -1,11 +1,10 @@
-<?php include "function.php" ?>
-
 <?php session_start(); ?>
+<?php include "function.php" ?>
 <?php
 	if(!is_loggedin()){
-		header('Location: ../index.php');
+		redirect('Location: ../index.php');
 	}elseif(!is_admin()){
-		#header('Location: includes/logout.php');
+		#redirect('Location: includes/logout.php');
 	}
 
 	$user_id = $_SESSION['user_id'];

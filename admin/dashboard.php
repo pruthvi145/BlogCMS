@@ -1,7 +1,7 @@
 <?php include "includes/header.php" ?>
 <?php if(is_admin()): ?>
 <?php else: ?>
-<?php header('dashboard.php'); ?>
+<?php redirect('dashboard.php'); ?>
 <?php endif; ?>
 <?php 
 

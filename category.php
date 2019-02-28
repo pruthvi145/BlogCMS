@@ -63,5 +63,5 @@ $cat_title = $row['cat_title'];
 	<!-- Footer -->
 	<?php include "includes/footer.php" ?>
 	<?php else : ?>
-	<?php header('Location: index.php'); ?>
+	<?php redirect('Location: index.php'); ?>
 	<?php endif; ?>

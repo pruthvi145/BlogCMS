@@ -1,6 +1,6 @@
 <?php include "includes/header.php" ?>
 <?php if(!is_admin()){
-	header('Location: index.php');
+	redirect('Location: index.php');
 } ?>
 <?php 
 	

@@ -1,12 +1,17 @@
 <?php include "db.php" ?>
+<?php ob_start(); ?>
 <?php
 	
 	define('SITE_TITLE', 'php-newCMS');
 	define('ROOT', 'http://localhost/php-newcms');
+	
 	function is_loggedin(){
 		return (isset($_SESSION['user_id'])) ? true : false;
 	}
 
+	function redirect($link){
+		header($link);
+	}
 	function is_admin($user_id = ''){
 		$user_id = (empty($user_id)) ? $_SESSION['user_id'] : $user_id;
 		$user = fetch_user($user_id);
@@ -61,7 +66,7 @@ function current_user(){
 		if(!$res){
 			die("ERROR: can't add category! <br>".$query."<br>".mysqli_error($connection));
 		}else{
-				header('Location: categories.php');
+				redirect('Location: categories.php');
 			}
 	}
 
@@ -74,7 +79,7 @@ function current_user(){
 		if(!$res){
 			die("ERROR: can't delete category! <br>".$query."<br>".mysqli_error($connection));
 		}else{
-				header('Location: categories.php');
+				redirect('Location: categories.php');
 			}
 	}
 
@@ -88,7 +93,7 @@ function current_user(){
 			if(!$res){
 				die("ERROR: can't update category! <br>".$query."<br>".mysqli_error($connection));
 			}else{
-				header('Location: categories.php');
+				redirect('Location: categories.php');
 			}
 	}
 
@@ -643,3 +648,5 @@ function get_columns($tablename){
 
 		return ($r) ? $r : false;
 	}
+
+	ob_end_flush();
