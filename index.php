@@ -6,7 +6,6 @@
 		<!-- Blog Entries Column -->
 		<div class="col-md-8">
 	
-			<h1 class="page-header">Posts <?php echo md5('test2');?></h1>
 			<hr>
 			<?php $rows = fetch_published_posts(); ?>
 			<?php if(empty($rows)): ?>
